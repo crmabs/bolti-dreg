@@ -4,6 +4,7 @@
   width: 100%;
   height: calc(100vh - 60px);
   overflow: hidden;
+  background-color: blueviolet;
 }
 
 .menu-bar {
@@ -30,4 +31,6 @@
 
 #canvas {
   background: white;
+  width: 650px;
+  height: 550px;
 }
