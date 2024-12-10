@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Drag & Drop Interface</title>
+    <link rel="stylesheet" href="src/styles/canvas.css">
+</head>
+<body>
+    <div id="menuBar" class="menu-bar"></div>
+    <div class="canvas-container">
+        <canvas id="canvas"></canvas>
+    </div>
+    <script type="module">
+        import { CanvasManager } from './src/js/canvas-manager.js';
+        import { MenuManager } from './src/js/menu.js';
+
+        const canvas = document.getElementById('canvas');
+        const menuBar = document.getElementById('menuBar');
+        const canvasManager = new CanvasManager(canvas);
+        const menuManager = new MenuManager(menuBar);
+
+        canvas.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const x = (e.clientX - rect.left - canvasManager.pan.x) / canvasManager.zoom;
+            const y = (e.clientY - rect.top - canvasManager.pan.y) / canvasManager.zoom;
+            
+            try {
+                const item = JSON.parse(e.dataTransfer.getData('text/plain'));
+                canvasManager.addShape(
+                    'rectangle',
+                    x - 40,
+                    y - 20,
+                    80,
+                    40,
+                    item.color,
+                    item.label
+                );
+            } catch (error) {
+                console.error('Error dropping shape:', error);
+            }
+        });
+    </script>
+</body>
+</html>
